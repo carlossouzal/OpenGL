@@ -8,6 +8,6 @@ public:
 	VertexBuffer(const void *data, GLuint size);
 	~VertexBuffer();
 
-	void bind();
-	void unbind();
+	void bind() const;
+	void unbind() const;
 };

@@ -6,6 +6,8 @@
 #include <sstream>
 
 #include "service/buffer/VertexBuffer.h"
+#include "service/array/VertexArray.h"
+#include "service/layout/VertexBufferLayout.h"
 
 const int gWindowWidth = 800;
 const int gWindowHeight = 600;
@@ -83,25 +85,18 @@ int main(void)
 
     //Buffers on the GPU
     VertexBuffer vbo(vertices, sizeof(vertices));
+    VertexArray vao;
 
-    GLuint vao;
-    //glGenBuffers(1, &vbo);
-    //glBindBuffer(GL_ARRAY_BUFFER, vbo);
-    //glBufferData(GL_ARRAY_BUFFER, , vertices, GL_STATIC_DRAW);
-
-    //Modern Opengl requires that we use a vertex array object
-    glGenVertexArrays(1, &vao);
-    glBindVertexArray(vao);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, NULL);
-
-    glEnableVertexAttribArray(0);
+    //Layouts
+    VertexBufferLayout layout;
+    layout.push<GLfloat>(3);
+    vao.addBuffer(vbo, layout);
 
     //Create a program shader
     const std::string vertexShader = parseShader("shader/vertexShader.glsl");
     const std::string fragmentShader = parseShader("shader/fragmentShader.glsl");
     GLint shaderProgram = createProgram(vertexShader, fragmentShader);
 
-    //Entre 0 e 1 - 0 -> preto, 1 - Branco (0 a 255, 0 -> preto, 255 - Branco);
     glClearColor(0.23f, 0.38f, 0.47f, 1.0f);
 
     /* Loop until the user closes the window */
@@ -115,9 +110,9 @@ int main(void)
 
         //Render the triangle
         glUseProgram(shaderProgram);
-        glBindVertexArray(vao);
+        vao.bind();
         glDrawArrays(GL_TRIANGLES, 0, 3);
-        glBindVertexArray(0);
+        vao.unbind();
 
         /* Swap front and back buffers */
         glfwSwapBuffers(gWindow);
@@ -125,7 +120,7 @@ int main(void)
 
     //Clean UP
     glDeleteProgram(shaderProgram);
-    glDeleteVertexArrays(1, &vao);
+    vao.~VertexArray();
     vbo.~VertexBuffer();
 
     glfwTerminate();

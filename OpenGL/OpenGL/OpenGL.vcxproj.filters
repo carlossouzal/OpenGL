@@ -21,6 +21,9 @@
     <ClCompile Include="src\service\buffer\VertexBuffer.cpp">
       <Filter>Arquivos de Origem</Filter>
     </ClCompile>
+    <ClCompile Include="src\service\array\VertexArray.cpp">
+      <Filter>Arquivos de Origem</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="shader\vertexShader.glsl" />
@@ -28,6 +31,12 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\service\buffer\VertexBuffer.h">
+      <Filter>Arquivos de Cabeçalho</Filter>
+    </ClInclude>
+    <ClInclude Include="src\service\array\VertexArray.h">
+      <Filter>Arquivos de Cabeçalho</Filter>
+    </ClInclude>
+    <ClInclude Include="src\service\layout\VertexBufferLayout.h">
       <Filter>Arquivos de Cabeçalho</Filter>
     </ClInclude>
   </ItemGroup>

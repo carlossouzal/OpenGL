@@ -146,6 +146,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\Aplication.cpp" />
+    <ClCompile Include="src\service\array\VertexArray.cpp" />
     <ClCompile Include="src\service\buffer\VertexBuffer.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -153,7 +154,9 @@
     <None Include="shader\vertexShader.glsl" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\service\array\VertexArray.h" />
     <ClInclude Include="src\service\buffer\VertexBuffer.h" />
+    <ClInclude Include="src\service\layout\VertexBufferLayout.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
