@@ -146,6 +146,14 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\Aplication.cpp" />
+    <ClCompile Include="src\service\buffer\VertexBuffer.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="shader\fragmentShader.glsl" />
+    <None Include="shader\vertexShader.glsl" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\service\buffer\VertexBuffer.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
