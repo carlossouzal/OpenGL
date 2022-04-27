@@ -8,6 +8,7 @@
 #include "service/buffer/VertexBuffer.h"
 #include "service/array/VertexArray.h"
 #include "service/layout/VertexBufferLayout.h"
+#include "service/shader/Shader.h"
 
 const int gWindowWidth = 800;
 const int gWindowHeight = 600;
@@ -15,57 +16,6 @@ const char* TITLE = { "Hello Triangle - part I" };
 GLFWwindow* gWindow = NULL;
 
 bool initOpenGL();
-
-static GLuint compileShader(const std::string& source, GLenum type) {
-    GLuint id = glCreateShader(type);
-    const GLchar* src = source.c_str();
-    glShaderSource(id, 1, &src, nullptr);
-    glCompileShader(id);
-
-    GLint result;
-    glGetShaderiv(id, GL_COMPILE_STATUS, &result);
-    if (!result) {
-        GLint length;
-        glGetShaderiv(id, GL_INFO_LOG_LENGTH, &length);
-        GLchar* message = (GLchar*)malloc(length * sizeof(GLchar));
-        glGetShaderInfoLog(id, length, &length, message);
-
-        std::cout << "Failed to compil e" << (type == GL_VERTEX_SHADER ? "vertex" : "fragment") << " shader!" << std::endl;
-        std::cout << message << std::endl;
-
-        glDeleteShader(id);
-        return 0;
-    }
-
-    return id;
-}
-
-static GLint createProgram(const std::string& vertexSource,const std::string& fragmentSource) {
-    GLuint program = glCreateProgram();
-    GLuint vertexShader = compileShader(vertexSource, GL_VERTEX_SHADER);
-    GLuint fragmentShader = compileShader(fragmentSource, GL_FRAGMENT_SHADER);
-
-    glAttachShader(program, vertexShader);
-    glAttachShader(program, fragmentShader);
-
-    glLinkProgram(program);
-    glValidateProgram(program);
-
-    glDeleteShader(vertexShader);
-    glDeleteShader(fragmentShader);
-
-    return program;
-}
-
-static std::string parseShader(const std::string& file) {
-    std::ifstream stream(file);
-    std::string line;
-    std::stringstream ss;
-    while (getline(stream, line)) {
-        ss << line << '\n';
-    }
-    return ss.str();
-}
 
 int main(void)
 {
@@ -93,9 +43,8 @@ int main(void)
     vao.addBuffer(vbo, layout);
 
     //Create a program shader
-    const std::string vertexShader = parseShader("shader/vertexShader.glsl");
-    const std::string fragmentShader = parseShader("shader/fragmentShader.glsl");
-    GLint shaderProgram = createProgram(vertexShader, fragmentShader);
+    Shader program("shader/vertexShader.glsl", "shader/fragmentShader.glsl");
+    program.unbind();
 
     glClearColor(0.23f, 0.38f, 0.47f, 1.0f);
 
@@ -109,7 +58,7 @@ int main(void)
         glClear(GL_COLOR_BUFFER_BIT);
 
         //Render the triangle
-        glUseProgram(shaderProgram);
+        program.bind();
         vao.bind();
         glDrawArrays(GL_TRIANGLES, 0, 3);
         vao.unbind();
@@ -119,7 +68,6 @@ int main(void)
     }
 
     //Clean UP
-    glDeleteProgram(shaderProgram);
     vao.~VertexArray();
     vbo.~VertexBuffer();
 
