@@ -24,7 +24,7 @@ public:
 
 	template<>
 	void push<GLfloat>(GLuint count) {
-		elements.push_back({GL_FLOAT, count, GL_FALSE});
+		elements.push_back({GL_FLOAT, count, GL_TRUE});
 		stride += count * sizeof(GL_FLOAT);
 	}
 

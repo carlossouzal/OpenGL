@@ -1,6 +1,8 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
+#include <glm/gtc/type_ptr.hpp>
+
 #include "Shader.h"
 
 Shader::Shader(const std::string& vertexFilepath, const std::string& fragmentFilepath)
@@ -42,6 +44,10 @@ GLuint Shader::compileShader(const std::string& source, GLenum type) {
 
 void Shader::setUniform4f(const std::string& name, GLfloat v1, GLfloat v2, GLfloat v3, GLfloat v4) {
     glUniform4f(getUniformLocation(name), v1, v2, v3, v4);
+}
+
+void Shader::setUniformMatrix4fv(const std::string& name, glm::mat4 matrix) {
+    glUniformMatrix4fv(getUniformLocation(name), 1, GL_FALSE, glm::value_ptr(matrix));
 }
 
 GLuint Shader::getUniformLocation(const std::string& name){
